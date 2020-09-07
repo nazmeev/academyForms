@@ -1,0 +1,13 @@
+<div class="card">
+    <img src="{{ imgPath }}{{ filmItem.favImage }}" alt="{{ filmItem.favTitle }}" class="card-img-top">
+    <div class="card-body d-flex flex-column flex-row">
+        <h5 class="card-title">
+          <a routerLink="/films/{{ filmItem.filmId }}" routerLinkActive="active">{{ filmItem.favTitle }}</a>
+        </h5>
+        <p class="card-text limit-height">{{ filmItem.favOverview | slice:0:80}}</p>      
+        <div class="card-footer bg-transparent border-dark mt-auto p-2">
+          <button class="btn btn-danger" (click)="removeFavorite(filmItem.id)">remove favorite</button>
+          <span class="pl-4">{{ filmItem.favPopularity }}</span> 
+        </div>  
+    </div>
+</div>

@@ -1,0 +1,30 @@
+<div class="alert alert-primary" role="alert">
+    Avarage popularity: {{ this.favoriteService.avaragePopularity }}
+</div>
+<button class="btn btn-danger position-sticky" (click) = "clearFavorite()">Очистить избранное</button>
+<div class="container" *ngIf="this.loaded; else containerNoLoaded">
+    <div *ngIf="this.favoriteService.favorites.length; then listFilms else noFilms"></div>
+    <ng-template #listFilms>
+        <div class="container mx-sm-0">
+            <div class="row">
+            <div class="col col-lg-4 col-md-6 col-sm-12 mb-4 d-flex align-items-stretch" *ngFor="let film of this.favoriteService.favorites">
+                <app-favorites-item class="card-wrapper" [imgPath]="imgPath" (unfavorited)="removeFavorite($event)" [filmItem]="film"></app-favorites-item>
+            </div>
+            </div>
+        </div>
+    </ng-template>
+
+    <ng-template #noFilms>
+        <div class="row">
+            <div class="col text-center">
+            <h2>No favorited films found</h2>
+            </div>
+        </div>
+    </ng-template>
+</div>
+
+<ng-template #containerNoLoaded>
+    <div class="spinner-border" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+</ng-template>
