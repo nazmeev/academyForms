@@ -17,5 +17,4 @@ For request using forkJoin from `rxjs` library
 Project consist of 2 routes
 1. Users / LoginComponent - driven-form
 2. Users / RegistrationComponent - reactive-form by FormBuilder
-3. The list of films shows films from  the themoviedb service. You can add to/(remove) favorite list
-4. Favorites list. Here you can see favorite films, average vote,  can clear the favorite list
+
