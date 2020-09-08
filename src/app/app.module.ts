@@ -21,6 +21,7 @@ import { SearchComponent } from './shared/components/search/search.component';
 import { UsersComponent } from './users/users.component';
 import { RegistrationComponent } from './users/registration/registration.component';
 import { LoginComponent } from './users/login/login.component';
+import { LogoutComponent } from './users/logout/logout.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { LoginComponent } from './users/login/login.component';
     SearchComponent,
     RegistrationComponent,
     UsersComponent,
-    LoginComponent
+    LoginComponent,
+    LogoutComponent
   ],
   imports: [
     BrowserModule,

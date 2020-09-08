@@ -6,28 +6,33 @@ import { FilmComponent } from './film/film.component';
 import { FavoritesComponent } from './favorites/favorites.component';
 import { RegistrationComponent } from './users/registration/registration.component';
 import { LoginComponent } from './users/login/login.component';
+import { UsersComponent } from './users/users.component';
 import { ExitRegistrationGuard } from './shared/guards/exit.registration.guard';
-import { RegistrationGuard } from './shared/guards/registration.guard';
+import { AuthGuard } from './shared/guards/auth.guard';
+import { GuestGuard } from './shared/guards/guest.guard';
+import { LogoutComponent } from './users/logout/logout.component';
 
 const appRoutes: Routes = [
   {path: '', 
     redirectTo: '/films',
     pathMatch: 'full'
   },
-  {path: 'films', component: FilmsComponent},
-  {path: 'films/:filmId', component: FilmComponent},
+  {path: 'films', component: FilmsComponent, canActivate: [AuthGuard]},
+  {path: 'films/:filmId', component: FilmComponent, canActivate: [AuthGuard]},
   {path: 'favorites', component: FavoritesComponent},
   {path: 'registration', 
     component: RegistrationComponent, 
-    // canActivate: [RegistrationGuard],
+    canActivate: [GuestGuard],
     canDeactivate: [ExitRegistrationGuard]
   },
-  {path: 'login', component: LoginComponent},
+  {path: 'login', component: LoginComponent, canActivate: [GuestGuard]},
+  {path: 'user', component: UsersComponent},
+  {path: 'logout', component: LogoutComponent},
   {path: '**', component:  NotFoundComponent},
 ]
 @NgModule({
   imports: [RouterModule.forRoot(appRoutes) ],
-  providers: [RegistrationGuard, ExitRegistrationGuard],
+  providers: [AuthGuard, GuestGuard, ExitRegistrationGuard],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

@@ -16,7 +16,7 @@ export class RegistrationService {
   public phoneMinlength: number = 10
   public phoneMaxlength: number = 13
 
-  static url = 'https://films-boo.firebaseio.com/users'
+  // static url = 'https://films-boo.firebaseio.com/users'
 
   public validationMessages = {
     'login': {
@@ -85,13 +85,13 @@ export class RegistrationService {
   isPhone(control: FormControl) {
     return (!/^[-+]?[0-9]+$/.test(control.value)) ? { "isPhone": true } : null
   }
-  checkUniqLogin(login: string): Observable<any>{
-    return this.http.get<User[]>(`${RegistrationService.url}.json`).pipe(
-      map(res => { console.log(res)
-        // return { "checkLogin": true };
-      })
-    )
-  }
+  // checkUniqLogin(login: string): Observable<any>{
+  //   return this.http.get<User[]>(`${RegistrationService.url}.json`).pipe(
+  //     map(res => { console.log(res)
+  //       // return { "checkLogin": true };
+  //     })
+  //   )
+  // }
 
   prepareUserToSave(user: User): User{
     user.phones = user.phones.toString()

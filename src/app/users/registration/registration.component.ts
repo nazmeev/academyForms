@@ -4,7 +4,8 @@ import { RegistrationService } from '../../shared/services/registration.service'
 import { ComponentCanDeactivate } from '../../shared/interfaces/candeactivate.interface';
 import { Observable, Subscription } from 'rxjs';
 import { AuthService } from '../../shared/services/auth.service';
-import { Router, ActivatedRoute, Params } from '@angular/router';
+import { Router, ActivatedRoute, Params, NavigationExtras } from '@angular/router';
+import { MessagesService } from '../../shared/services/messages.service';
 
 
 @Component({
@@ -14,8 +15,10 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 })
 export class RegistrationComponent implements OnInit, ComponentCanDeactivate, OnDestroy {
   registrationForm: FormGroup
+
   saved: boolean = false
-  subs: Subscription
+  subsR: Subscription
+  subsF: Subscription
 
   public maxLengthArray: number = 3
   public addPhoneActive: boolean = false
@@ -25,7 +28,9 @@ export class RegistrationComponent implements OnInit, ComponentCanDeactivate, On
     private registrationService: RegistrationService,
     private authService: AuthService,
     private router: Router,
-    private route: ActivatedRoute ) { }
+    // private msgService: MessagesService
+    // private route: ActivatedRoute
+     ) { }
 
   public formErrorsClasses = this.registrationService.getFormErrorsClasses
   public formErrors = this.registrationService.getFormErrors
@@ -35,21 +40,13 @@ export class RegistrationComponent implements OnInit, ComponentCanDeactivate, On
 
   ngOnInit(): void {
     this.buildFormRegistration()
-    this.route.queryParams.subscribe((params: Params) => {
-      if(params['registered']){
-        // успешно зарегистрировались
-      }else{
-        if(params['accessDenied']){
-          //авторизуйтесь
-        }
-      }
-    })
   }
   canDeactivate() : boolean | Observable<boolean>{
     return (!this.saved)? confirm("Вы хотите покинуть страницу?"): true
   }
   ngOnDestroy(){
-    if(this.subs) this.subs.unsubscribe()
+    if(this.subsR) this.subsR.unsubscribe()
+    if(this.subsF) this.subsF.unsubscribe()
   }
 
   buildFormRegistration() {
@@ -77,8 +74,7 @@ export class RegistrationComponent implements OnInit, ComponentCanDeactivate, On
       ]],
       phones: new FormArray([])
     })
-    this.registrationForm.valueChanges.subscribe(data => this.onValueChange())
-    this.registrationForm.statusChanges.subscribe(data => console.log(data))
+    this.subsF = this.registrationForm.valueChanges.subscribe(data => this.onValueChange())
   }
 
   onValueChange() {
@@ -172,18 +168,17 @@ export class RegistrationComponent implements OnInit, ComponentCanDeactivate, On
   registration() {
     this.registrationForm.disable()
     let user = this.registrationService.prepareUserToSave(this.registrationForm.value)
-    
-    
-    // this.registrationForm.value
-    // user.phones = user.phones.toString()
-    this.subs = this.authService.registration(user).subscribe(
-      resp => this.router.navigate(['login']),
+    this.subsR = this.authService.registration(user).subscribe(
+      resp => {
+        this.saved = true
+        const navigationExtras: NavigationExtras = {state: {data: 'Успешная регистрация', type: 'alert-success'}}
+        this.router.navigate(['user'], navigationExtras)
+      },
       err => {
-        console.warn(err)
+        console.log(err)        
         this.registrationForm.enable()
       }
     )
   }
-
 
 }
